@@ -50,32 +50,32 @@ else
 		if [ "$extension" == "7z" ]
 		then
 			archive=1
-			cmd="7za e ../$SOURCE_DIR/$FILEPATH -y -w $OUT_DIR"
+			cmd="7za e ../$SOURCE_DIR/$FILE -y -o$OUT_DIR"
 		elif [ "$extension" == "zip" ]
 		then
 			archive=1
-			cmd="unzip ../$SOURCE_DIR/$FILEPATH -d $OUT_DIR"
+			cmd="unzip ../$SOURCE_DIR/$FILE -d $OUT_DIR"
 		elif [ "$extension" == "tar" ]
 		then
 			archive=1
-			cmd="tar -xvf ../$SOURCE_DIR/$FILEPATH -C $OUT_DIR"
+			cmd="tar -xvf ../$SOURCE_DIR/$FILE -C $OUT_DIR"
 		elif [ "$extension" == "gz" ]
 		then
 			archive=1
 			if [ "${extension%.*}" == "tar" ] #.tar.gz != .gz
 			then
-				cmd="tar -zxvf ../$SOURCE_DIR/$FILEPATH -C $OUT_DIR"
+				cmd="tar -zxvf ../$SOURCE_DIR/$FILE -C $OUT_DIR"
 			else
-				cmd="gzip -d -S $OUT_DIR ../$SOURCE_DIR/$FILEPATH"
+				cmd="gzip -d -S $OUT_DIR ../$SOURCE_DIR/$FILE"
 			fi
 		elif [ "$extension" == "bz2" ]
 		then
 			archive=1
 			if [ "${extension%.*}" == "tar" ] #(.tar.bz2) != .gz
 			then
-				cmd="tar -jxvf ../$SOURCE_DIR/$FILEPATH -C "$OUT_DIR""
+				cmd="tar -jxvf ../$SOURCE_DIR/$FILE -C "$OUT_DIR""
 			else
-				cmd="cp ../$SOURCE_DIR/$FILEPATH $OUT_DIR && bzip2 -d -v $OUT_DIR/$FILE"
+				cmd="cp ../$SOURCE_DIR/$FILE $OUT_DIR && bzip2 -d -v $OUT_DIR/$FILE"
 		fi
 		elif [ "$extension" == "bz" ]
 		then
@@ -87,15 +87,17 @@ else
 		
 		if [ $archive == 0 ]
 		then
-			$(cp ../$SOURCE_DIR/$FILEPATH $TARGET_DIR)
+			#echo "cp ../$SOURCE_DIR/$FILE $TARGET_DIR"
+			$(cp ../$SOURCE_DIR/$FILE $TARGET_DIR)
 		elif [ $archive == 1 ]
 		then
-			echo "$OUT_DIR"
+			#echo "$OUT_DIR"
 			mkdir -p $OUT_DIR
 			eval $cmd
+			#echo "$cmd"
 		else
 			echo "Unsupported format detect"
-			"../$SOURCE_DIR/$FILEPATH\n" >> _UnhandledFiles.txt
+			"../$SOURCE_DIR/$FILE\n" >> _UnhandledFiles.txt
 		fi
 	done
 	popd
